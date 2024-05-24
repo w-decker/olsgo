@@ -12,6 +12,13 @@ Ordinary-least-squares bivariate regression in Go.
 
 To use what's already created:
 
+1. First install
+
+```sh
+go get github.com/w-decker/olsgo@latest
+```
+
+2. Then import like you would any other library
 ```go
 package main
 
