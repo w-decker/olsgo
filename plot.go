@@ -12,14 +12,14 @@ import (
 	"gonum.org/v1/plot/vg/draw"
 )
 
-func PlotRaw(p string, f string, n string, x string, y string) error {
+func PlotRaw(p string, n string, x string, y string) error {
 
 	d, err := LoadCSV(p)
 	if err != nil {
 		fmt.Errorf("could not read file: %v", err)
 	}
 
-	out, err := os.Create(p)
+	out, err := os.Create(n)
 	if err != nil {
 		log.Fatalf("Error: %v \nCould not create plot file.", err)
 	}
@@ -44,6 +44,9 @@ func PlotRaw(p string, f string, n string, x string, y string) error {
 	scatter.GlyphStyle.Color = color.RGBA{R: 102, B: 167, A: 249}
 	scatter.GlyphStyle.Radius = vg.Points(4)
 	plt.Add(scatter)
+	plt.Title.Text = fmt.Sprintf("%s and %s", x, y)
+	plt.X.Label.Text = x
+	plt.Y.Label.Text = y
 
 	wt, err := plt.WriterTo(300, 300, "png")
 	if err != nil {

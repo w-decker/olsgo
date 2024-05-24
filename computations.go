@@ -86,6 +86,7 @@ func B1(x []float64, y []float64) float64 {
 	return b
 }
 
+// Calculate b0
 func Intercept(x []float64, y []float64) float64 {
 	b1 := B1(x, y)
 	xbar := Mean(x)
@@ -119,6 +120,7 @@ func Sse(y []float64, yhat []float64) float64 {
 	return sse
 }
 
+// calculate R2 from raw data
 func R2(x []float64, y []float64) float64 {
 	sst := Tss(y)
 	yhat := YHat(x, y)
