@@ -9,6 +9,26 @@ import (
 	"strconv"
 )
 
+func (o *ols) format() string {
+	fs := "OLSGO Output \n"
+	fs += fmt.Sprintf("Intercept: %-15.4f", o.intercept)
+	fs += fmt.Sprintf("B1: %-15.4f", o.b1)
+	fs += fmt.Sprintf("Pearson's r: %-15.4f", o.r)
+	fs += fmt.Sprintf("Residual variance: %-15.4f", o.R2)
+
+	return fs
+}
+
+func (o *ols) save(n string) {
+	data := []byte(o.format())
+	err := os.WriteFile(n+".txt", data, 0666)
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Output saved.")
+}
+
 // read .csv file and returns a map where key-val pairs are header and observation data
 func LoadCSV(filename string) (map[string][]float64, error) {
 
@@ -49,24 +69,4 @@ func LoadCSV(filename string) (map[string][]float64, error) {
 	}
 
 	return result, nil
-}
-
-func (o *ols) format() string {
-	fs := "OLSGO Output \n"
-	fs += fmt.Sprintf("Intercept: %-15.4f", o.intercept)
-	fs += fmt.Sprintf("B1: %-15.4f", o.b1)
-	fs += fmt.Sprintf("Pearson's r: %-15.4f", o.r)
-	fs += fmt.Sprintf("Residual variance: %-15.4f", o.R2)
-
-	return fs
-}
-
-func (o *ols) save(n string) {
-	data := []byte(o.format())
-	err := os.WriteFile(n+".txt", data, 0666)
-
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Bill saved.")
 }
