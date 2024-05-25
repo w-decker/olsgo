@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func (o *ols) format() string {
+func (o *ols) Format() string {
 	fs := "OLSGO Output \n"
 	fs += fmt.Sprintf("Intercept: %-15.4f", o.intercept)
 	fs += fmt.Sprintf("B1: %-15.4f", o.b1)
@@ -19,8 +19,8 @@ func (o *ols) format() string {
 	return fs
 }
 
-func (o *ols) save(n string) {
-	data := []byte(o.format())
+func (o *ols) Save(n string) {
+	data := []byte(o.Format())
 	err := os.WriteFile(n+".txt", data, 0666)
 
 	if err != nil {
