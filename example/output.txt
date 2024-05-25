@@ -1,0 +1,2 @@
+OLSGO Output 
+Intercept: 46.0917        B1: 0.1461         Pearson's r: 0.9471         Residual variance: 0.1030         
