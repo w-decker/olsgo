@@ -1,6 +1,8 @@
 package olsgo
 
-import "math"
+import (
+	"math"
+)
 
 // output
 type ols struct {
@@ -8,6 +10,8 @@ type ols struct {
 	b1        float64
 	r         float64
 	R2        float64
+	x         string
+	y         string
 }
 
 // sum over 1d slice
@@ -139,6 +143,8 @@ func OLS(d map[string][]float64, x string, y string) ols {
 		b1:        B1(xv, yv),
 		r:         PearsonR(xv, yv),
 		R2:        R2(xv, yv),
+		x:         x,
+		y:         y,
 	}
 
 	return reg
