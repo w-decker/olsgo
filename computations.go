@@ -12,29 +12,25 @@ type ols struct {
 
 // sum over 1d slice
 func Sum(x []float64) float64 {
-	sum := 0.0
-	for i := 0; i < len(x); i++ {
-		sum += float64(x[i])
+	var sum float64
+	for _, v := range x {
+		sum += v
 	}
 	return sum
 }
 
 // compute mean over 1d slice
 func Mean(x []float64) float64 {
-	n := float64(len(x))
-	s := Sum(x)
-	avg := s / n
-
-	return avg
+	return Sum(x) / float64(len(x))
 }
 
 // Standardize 1d slize
 func ZScore(x []float64) []float64 {
-	var z []float64
 	mu := Mean(x)
 	sigma := Std(x)
-	for _, n := range x {
-		z = append(z, ((n - mu) / sigma))
+	z := make([]float64, len(x))
+	for i, v := range x {
+		z[i] = (v - mu) / sigma
 	}
 	return z
 }
@@ -56,24 +52,29 @@ func Tss(y []float64) float64 {
 func Std(x []float64) float64 {
 	numer := Tss(x)
 	n := float64(len(x))
-
-	sigma := math.Sqrt((numer / n))
-
-	return sigma
+	return math.Sqrt(numer / (n - 1))
 }
 
 // Compute Pearson's r for two 1d slices.
 func PearsonR(x []float64, y []float64) float64 {
-
-	n := float64(len(x))
-	m := make([]float64, len(x))
-	for idx, n := range x {
-		m = append(m, n*float64(y[idx]))
+	if len(x) != len(y) {
+		return 0 // or handle error appropriately
 	}
 
-	numer := Sum(m)
+	xmu := Mean(x)
+	ymu := Mean(y)
 
-	return numer/n - 1
+	var numer, xdenom, ydenom float64
+
+	for i := range x {
+		numer += (x[i] - xmu) * (y[i] - ymu)
+		xdenom += (x[i] - xmu) * (x[i] - xmu)
+		ydenom += (y[i] - ymu) * (y[i] - ymu)
+	}
+
+	r := numer / math.Sqrt(xdenom*ydenom)
+
+	return r
 }
 
 func B1(x []float64, y []float64) float64 {
@@ -110,13 +111,11 @@ func YHat(x []float64, y []float64) []float64 {
 
 // compute sums of squares explained for 1d slice
 func Sse(y []float64, yhat []float64) float64 {
-	var t []float64
-	ybar := Mean(y)
+	var sse float64
 	for i := range y {
-		d := yhat[i] - ybar
-		t = append(t, d*d)
+		d := y[i] - yhat[i]
+		sse += d * d
 	}
-	sse := Sum(t)
 	return sse
 }
 
@@ -131,4 +130,17 @@ func R2(x []float64, y []float64) float64 {
 }
 
 // Compute ordinary-least-squares regression over x and y variable
-// func OLS(d map[string][]float64, x string, y string)
+func OLS(d map[string][]float64, x string, y string) ols {
+	xv := d[x]
+	yv := d[y]
+
+	reg := ols{
+		intercept: Intercept(xv, yv),
+		b1:        B1(xv, yv),
+		r:         PearsonR(xv, yv),
+		R2:        R2(xv, yv),
+	}
+
+	return reg
+
+}
