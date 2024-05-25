@@ -2,13 +2,7 @@
 
 Ordinary-least-squares bivariate regression in Go.
 
->[!WARNING]
->This is a _incomplete_. Only limited functionality is available.
-
 # Use
-
->[!NOTE]
->Tutorial coming soon.
 
 To use what's already created:
 
@@ -24,4 +18,19 @@ package main
 
 import "github.com/w-decker/olsgo"
 ```
+3. Go to the [example](/example/main.go) to see how to execute `olsgo` and get some output.
+
+# Output
+
+1. `.txt` file
+```txt
+OLSGO Output 
+Intercept: 46.0917        B1: 0.1461         Pearson's r: 0.9471         Residual variance: 0.1030         
+```
+
+2. Some plots (more coming later)
+
+
+![[Raw data]](/example/plot.png)
+
 
